@@ -1,0 +1,18 @@
+---
+services:
+  webdav:
+    build: .
+    container_name: nginx-webdav
+    environment:
+      - CLIENT_MAX_BODY_SIZE=1G
+      - WEBDAV_USER_user1=password1
+      - WEBDAV_USER_user2=password2
+      - WEBDAV_USER_user3=password3
+    ports:
+      - "8080:80"
+    volumes:
+      # Mount individual user directories to different locations
+      - ./user1_data:/data/user1
+      - ./user2_data:/data/user2
+      - ./user3_data:/data/user3
+    restart: unless-stopped
