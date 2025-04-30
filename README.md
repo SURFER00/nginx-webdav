@@ -15,8 +15,14 @@ This Docker image provides a Nginx-based WebDAV server with multiple user authen
 ### Using Docker Compose
 
 1. Clone this repository
-2. Modify the `docker-compose.yml` file to set up your users and passwords
-3. Run the container:
+2. Copy the `docker-compose.example.yml` to `docker-compose.yml`
+
+```bash
+cp docker-compose.example.yml docker-compose.yml
+```
+
+3. Modify the `docker-compose.yml` file to set up your users and passwords
+4. Run the container:
 
 ```bash
 docker-compose up -d
