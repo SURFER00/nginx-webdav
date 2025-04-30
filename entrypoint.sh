@@ -15,11 +15,12 @@ create_webdav_user() {
     chown -R nginx:nginx /data/$USERNAME
     chmod -R 755 /data/$USERNAME
 
-    # Create .htpasswd file for the user
-    htpasswd -bc /etc/nginx/htpasswd $USERNAME $PASSWORD
+    htpasswd -b /etc/nginx/htpasswd $USERNAME $PASSWORD
 
     echo "Created WebDAV user: $USERNAME"
 }
+
+touch /etc/nginx/htpasswd
 
 # Process users from environment variables
 # Format: WEBDAV_USER_name=password
