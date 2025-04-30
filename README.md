@@ -61,7 +61,7 @@ Each user's data is stored in `/data/<username>/` within the container. You can 
 ```yaml
 volumes:
   - /host/path/for/user1:/data/user1
-  - /host/path/for/user2
+  - /host/path/for/user2:/data/user2
 ```
 
 ## Acknowledgements
