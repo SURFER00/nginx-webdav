@@ -46,7 +46,7 @@ jobs:
       - name: Extract version from Dockerfile
         id: dockerfile_version
         run: |
-          VERSION=$(grep '^NGINX_VERSION' Dockerfile | awk -F'=' '{print $2}')
+          VERSION=$(grep '^ENV NGINX_VERSION' Dockerfile | awk -F'=' '{print $2}')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Build and push docker image
