@@ -2,9 +2,9 @@
 FROM alpine:latest as builder
 
 # Set nginx version and module versions
-ENV NGINX_VERSION=1.28.0
+ENV NGINX_VERSION=1.28.1
 ENV NGINX_DAV_EXT_VER=4.0.1
-ENV HEADERS_MORE_VER=0.38
+ENV HEADERS_MORE_VER=0.39
 
 # Install build dependencies
 RUN apk add --no-cache \
