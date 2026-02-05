@@ -2,7 +2,7 @@
 FROM alpine:latest as builder
 
 # Set nginx version and module versions
-ENV NGINX_VERSION=1.28.1
+ENV NGINX_VERSION=1.28.2
 ENV NGINX_DAV_EXT_VER=4.0.1
 ENV HEADERS_MORE_VER=0.39
 
