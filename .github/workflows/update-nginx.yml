@@ -1,0 +1,53 @@
+name: Update nginx version
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve latest stable nginx version
+        id: versions
+        run: |
+          # Scrape nginx.org download page for all versioned source tarballs,
+          # keep only stable releases (even minor), pick the highest.
+          LATEST=$(
+            curl -fsSL https://nginx.org/en/download.html \
+            | grep -oP '(?<=nginx-)\d+\.\d+\.\d+(?=\.tar\.gz)' \
+            | awk -F'.' '$2 % 2 == 0' \
+            | sort -V \
+            | tail -1
+          )
+
+          if [[ -z "$LATEST" ]]; then
+            echo "Could not determine latest stable nginx version — aborting." >&2
+            exit 1
+          fi
+
+          CURRENT=$(grep -E '^ENV NGINX_VERSION=' Dockerfile | cut -d'=' -f2)
+
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "latest=$LATEST"   >> "$GITHUB_OUTPUT"
+          echo "Current: $CURRENT / Latest: $LATEST"
+
+      - name: Update Dockerfile and push
+        if: steps.versions.outputs.latest != steps.versions.outputs.current
+        run: |
+          sed -i \
+            "s|^ENV NGINX_VERSION=.*|ENV NGINX_VERSION=${{ steps.versions.outputs.latest }}|" \
+            Dockerfile
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Dockerfile
+          git commit -m "chore: bump nginx to ${{ steps.versions.outputs.latest }}"
+          git push
