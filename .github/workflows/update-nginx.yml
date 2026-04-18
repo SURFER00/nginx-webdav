@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
 
     steps:
       - name: Checkout repository
@@ -51,3 +52,13 @@ jobs:
           git add Dockerfile
           git commit -m "chore: bump nginx to ${{ steps.versions.outputs.latest }}"
           git push
+
+      - name: Dispatch build workflow
+        if: steps.versions.outputs.latest != steps.versions.outputs.current
+        run: |
+          curl -fsSL \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/build-push-docker-image.yml/dispatches \
+            -d '{"ref":"main"}'
