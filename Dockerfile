@@ -3,7 +3,7 @@ FROM alpine:latest as builder
 
 # Set nginx version and module versions
 ENV NGINX_VERSION=1.30.4
-ENV NGINX_DAV_EXT_VER=4.0.1
+ENV NGINX_DAV_EXT_VER=master
 ENV HEADERS_MORE_VER=0.39
 
 # Install build dependencies
@@ -32,7 +32,7 @@ RUN curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.ta
     rm nginx.tar.gz
 
 # Download and extract nginx-dav-ext-module source
-RUN curl -fSL https://github.com/mid1221213/nginx-dav-ext-module/archive/v${NGINX_DAV_EXT_VER}.tar.gz -o dav-ext.tar.gz && \
+RUN curl -fSL https://github.com/dgraziotin/nginx-dav-ext-module/archive/refs/heads/master.tar.gz -o dav-ext.tar.gz && \
     mkdir -p /usr/src/nginx-dav-ext-module && \
     tar -zxC /usr/src -f dav-ext.tar.gz && \
     rm dav-ext.tar.gz
